@@ -26,10 +26,19 @@ int main() {
 
   char *token;
   char *saveptr;
+  char *ptr = buffer;
+  //  figure out how to loop this
 
-  token = strtok_r(buffer, ' ', &saveptr);
-  printf("tokens are: %s", token);
+  // first token
 
+  printf("tokens are:\n");
+  token = strtok_r(buffer, " ", &saveptr);
+  printf("%s\n", token);
+  while (*ptr != '\0') {
+    token = strtok_r(NULL, " ", &saveptr);
+    printf("%s\n, token", token);
+    ptr++;
+  }
   free(buffer);
   return 0;
 }

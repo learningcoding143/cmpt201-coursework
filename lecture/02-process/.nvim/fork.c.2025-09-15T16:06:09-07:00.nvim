@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main () {
+  fork();
+  int pid = getpid();
+
+  if(pid != 0) {
+    printf("start: %d \n", pid);
+  } else { 
+    printf("child");
+
+    }
+}

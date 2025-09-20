@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int maie() {
+  fork()
+
+      for (int i = 0; i < 20; i++) {
+    printf("sleeping");
+    sleep(1);
+  }
+  printf("done");
+}

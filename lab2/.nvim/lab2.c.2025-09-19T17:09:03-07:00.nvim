@@ -1,0 +1,67 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+
+start:
+  char *buffer;
+  size_t bufsize = 32;
+  size_t chars;
+  int stat;
+
+  buffer = (char *)malloc(bufsize * sizeof(char));
+  if (buffer == NULL) {
+    return (1);
+  }
+
+  printf("Enter a command: ");
+  fflush(stdout);
+
+  chars = getline(&buffer, &bufsize, stdin);
+  printf("B4 fork: %s\n", buffer);
+  pid_t pid = fork();
+
+  if (pid == 0) {
+    // child exec branch change the tokenizer
+    printf("You entered command:%s\n", buffer);
+    char *token;
+    char *saveptr;
+    char *save;
+    char *copy;
+    copy = (char *)malloc(bufsize * sizeof(char));
+    save = (char *)malloc(bufsize * sizeof(char));
+    strcpy(copy, buffer);
+
+    printf("tokens are:\n");
+    token = strtok_r(buffer, "/", &saveptr);
+    while (token != NULL) {
+      printf("%s\n", token);
+      token = strtok_r(NULL, "/", &saveptr);
+      if (token != NULL) {
+        save = token;
+      }
+      // exec cmd entered
+      //
+    }
+    printf("copy is: %s\n", copy);
+    printf("last token: %s\n", save);
+    printf("calling exec now.\n");
+    copy[strcspn(copy, "\n")] =0;
+    execl(copy, copy, (char *)NULL);
+    exit(0);
+  } else {
+    waitpid(pid, &stat, 0);
+    printf("parent\n");
+  }
+
+  free(buffer);
+  goto start;
+  return 0;
+}
+
+
+

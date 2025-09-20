@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+int main() {
+
+  printf("execl now!\n");
+  char arg1[] = "bin/ls";
+  execl(arg1, arg1, (char*)NULL);
+
+} 

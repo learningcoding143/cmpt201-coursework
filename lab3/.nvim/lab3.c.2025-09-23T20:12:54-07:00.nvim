@@ -1,0 +1,82 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct node {
+  char *input;
+
+  struct node *next;
+};
+typedef struct node node_t;
+
+struct linked_list {
+
+  int cap;
+  int size;
+  node_t *head;
+};
+typedef struct linked_list list_t;
+
+node_t *construct(char *str) {
+  node_t *node = malloc(sizeof(node_t));
+  node->input = strdup(str);
+  node->next = NULL;
+  return node;
+}
+
+list_t *create_list() {
+  list_t *list = malloc(sizeof(list_t));
+  list->cap = 5;
+  list->head = NULL;
+  list->size = 0;
+  return list;
+}
+
+void add_node(list_t *list, char *str) {
+  // consider the cap later remove tail when 5
+  //
+  node_t *new = construct(str);
+  new->next = list->head;
+  list->head = new;
+  list->size++;
+}
+
+void delete_tail(list_t *list) {
+  node_t *curr = list->head;
+  node_t *prev;
+
+  while (curr != NULL) {
+    prev = curr;
+    curr = curr->next;
+  }
+  prev->input = NULL;
+  free(prev->next);
+  prev->next = NULL;
+}
+void print_list(list_t *list) {
+  node_t *curr = list->head;
+  while (curr != NULL) {
+    printf("%s \n", curr->input);
+    curr = curr->next;
+  }
+}
+
+int main() {
+
+  list_t *list = create_list();
+
+  char *buff = NULL;
+  size_t size = 0;
+
+  while (1) {
+    printf("Enter something: ");
+    if (getline(&buff, &size, stdin) != -1L) {
+      buff[strcspn(buff, "\n")] = '\0';
+      if (strcmp(buff, "print") == 0) {
+        print_list(list);
+      } else {
+        add_node(list, buff);
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+  printf("forking\n");
+  int pid = fork();
+
+  if (pid != 0) {
+    //execlp("ls", "ls", (char *)NULL);
+    //parent
+    //
+    int stat;
+    waitpid(pid, &stat, 0);
+    :
+  } else {
+    execlp("ls", "ls", "-alh", (char *)NULL);
+
+    //child  
+  }
+}

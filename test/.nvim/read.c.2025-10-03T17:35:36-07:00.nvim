@@ -1,0 +1,46 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+  char wd[128];
+  char buf[128];
+  char *prompt = getcwd(wd, sizeof(wd));
+  char *promp12 = "$";
+  char *prompt2 = " ";
+  write(STDOUT_FILENO, prompt, strlen(prompt));
+  write(STDOUT_FILENO, promp12, strlen(promp12));
+  write(STDOUT_FILENO, prompt2, strlen(prompt2));
+
+  read(STDIN_FILENO, buf, sizeof(buf));
+
+  char *s = buf;
+
+  write(STDOUT_FILENO, s, strlen(buf));
+
+  // printf("%s", buf);
+
+  // clean the string
+  // buf[strcspn(buf, "\n")] = 0;
+
+  // tokenize string
+
+  // need to store tokens
+  char *args[1+1];
+
+  char *tok;
+  char *savptr;
+  tok = strtok_r(buf, " ", &savptr);
+  int count = 0;
+  while (tok != NULL) {
+    args[count] = tok;
+    tok = strtok_r(NULL, " ", &savptr);
+    count++;
+  }
+  char *cmd = args[0];
+  printf("%s\n", cmd);
+  execvp(cmd, args);
+  return 0;
+}

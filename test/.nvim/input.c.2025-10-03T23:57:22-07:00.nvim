@@ -1,0 +1,72 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+int main() {
+
+  bool isRunning = true;
+  while (isRunning) {
+    char buffer[1024];
+    char prom[1024];
+
+    char *prompt = getcwd(prom, sizeof(prom));
+    char *prompt2 = "$ ";
+    char *path = strcat(prompt, prompt2);
+    int stat;
+    write(STDOUT_FILENO, path, strlen(path));
+
+    if (read(STDIN_FILENO, buffer, sizeof(buffer)) == -1) {
+
+      perror("failed to get input");
+      return 1;
+    }
+    // write(STDOUT_FILENO, buffer, strlen(buffer));
+
+    char *args[5] = {NULL};
+
+    char *tok;
+    char *saveptr;
+    int count = 0;
+    buffer[strcspn(buffer, "\n")] = '\0';
+    tok = strtok_r(buffer, " \n\t", &saveptr);
+    args[0] = tok;
+    count++;
+
+    while (tok != NULL) {
+      tok = strtok_r(NULL, " \n\t", &saveptr);
+      args[count] = tok;
+      count++;
+    }
+    args[count] = NULL;
+    // debug print see the tokens
+    for (int i = 0; i < 5; i++) {
+      if (args[i] == NULL) {
+        printf("NULL\n");
+      } else {
+        printf("%s\n", args[i]);
+      }
+    }
+    // search for &
+
+    printf("argument at arg[%d] is: %s ", count - 1, args[count - 1]);
+    pid_t pid = fork();
+    if (pid == -1) {
+      perror("fork()failed");
+    } else if (pid != 0) {
+
+      waitpid(pid, &stat, 0);
+
+    } else {
+
+      execvp(args[0], args);
+      perror("exec failed");
+    }
+    // break;
+  }
+
+  return 0;
+}

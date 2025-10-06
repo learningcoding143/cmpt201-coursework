@@ -17,9 +17,9 @@ int main() {
     char *prompt2 = "$ ";
     char *path = strcat(prompt, prompt2);
     int stat;
-    pid_t pid;
-    while ((pid = waitpid(-1, &stat, WNOHANG)) > 0) {
-      printf("BG PROCESs DONE\n");
+
+    while (waitpid(-1, &stat, WNOHANG) > 0) {
+     printf("BG PROCESs DONE\n"); 
     }
 
     write(STDOUT_FILENO, path, strlen(path));
@@ -49,7 +49,7 @@ int main() {
       }
     }
     args[count] = NULL;
-    printf("Number of args[] is: %d\n", count);
+
     for (int i = 0; i < 5; i++) {
       if (args[i] == NULL) {
         break;
@@ -81,7 +81,7 @@ int main() {
     // search for &
 
     printf("argument at arg[%d] is: %s \n", count - 1, args[count - 1]);
-    pid = fork();
+    pid_t pid = fork();
     if (pid == -1) {
       perror("fork()failed");
     } else if (pid != 0) {

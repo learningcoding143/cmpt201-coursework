@@ -49,7 +49,7 @@ int main() {
       }
     }
     args[count] = NULL;
-    printf("Number of args[] is: %d\n", count);
+    printf("Number of args[] is: %d", count);
     for (int i = 0; i < 5; i++) {
       if (args[i] == NULL) {
         break;

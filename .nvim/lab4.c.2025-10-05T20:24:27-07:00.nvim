@@ -1,0 +1,24 @@
+#define _POSIX_C_SOURCE 200809L
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+struct header {
+    uint64_t size;
+    struct header* next;
+};
+
+
+int main() {
+
+  void *current;
+  void *heap_start = sbrk(256);
+    
+    if (heap_start == (void*)-1) {
+        printf("sbrk failed\n");
+        return 1;
+      }sbrk(); 
+
+}

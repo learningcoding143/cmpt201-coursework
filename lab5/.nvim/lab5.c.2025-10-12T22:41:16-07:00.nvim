@@ -1,0 +1,140 @@
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+  int id;
+};
+
+void initialize_block(struct header *block, uint64_t size, struct header *next,
+                      int id) {
+  block->size = size;
+  block->next = next;
+  block->id = id;
+}
+
+int find_first_fit(struct header *free_list_ptr, uint64_t size) {
+  // TODO: Implement first fit
+  struct header *curr = free_list_ptr;
+  while (curr != NULL) {
+    if (curr->size >= size) {
+      return curr->id;
+    }
+    curr = curr->next;
+  }
+  return -1;
+}
+
+int find_best_fit(struct header *free_list_ptr, uint64_t size) {
+  int best_fit_id = -1;
+  // TODO: Implement best fit
+  int left;
+  int least;
+  struct header *curr = free_list_ptr;
+  while (curr != NULL) {
+    // first one
+    if (curr->size >= size && best_fit_id == -1) {
+      best_fit_id = curr->id;
+      least = curr->size - size;
+    }
+    // find match
+    if (curr->size >= size) {
+      left = curr->size - size;
+
+      if (left < 0) {
+        continue;
+      }
+      if (left < least) {
+        least = left;
+        best_fit_id = curr->id;
+      }
+    }
+    curr = curr->next;
+  }
+  return best_fit_id;
+}
+
+int find_worst_fit(struct header *free_list_ptr, uint64_t size) {
+  int worst_fit_id = -1;
+  // TODO: Implement worst fit
+  // worst fit search whole list reutn id that has most leftover space
+  int greatest;
+  int left;
+  struct header *curr = free_list_ptr;
+  while (curr != NULL) {
+    if (curr->size >= size && worst_fit_id == -1) {
+      worst_fit_id = curr->id;
+      greatest = curr->size - size;
+    }
+    if (curr->size >= size) {
+      left = curr->size - size;
+
+      if (left > greatest) {
+        greatest = left;
+        worst_fit_id = curr->id;
+      }
+    }
+    curr = curr->next;
+  }
+  return worst_fit_id;
+}
+
+int main(void) {
+
+  struct header *free_block1 = (struct header *)malloc(sizeof(struct header));
+  struct header *free_block2 = (struct header *)malloc(sizeof(struct header));
+  struct header *free_block3 = (struct header *)malloc(sizeof(struct header));
+  struct header *free_block4 = (struct header *)malloc(sizeof(struct header));
+  struct header *free_block5 = (struct header *)malloc(sizeof(struct header));
+
+  initialize_block(free_block1, 6, free_block2, 1);
+  initialize_block(free_block2, 12, free_block3, 2);
+  initialize_block(free_block3, 24, free_block4, 3);
+  initialize_block(free_block4, 8, free_block5, 4);
+  initialize_block(free_block5, 4, NULL, 5);
+
+  struct header *free_list_ptr = free_block1;
+
+  int first_fit_id = find_first_fit(free_list_ptr, 7);
+  int best_fit_id = find_best_fit(free_list_ptr, 7);
+  int worst_fit_id = find_worst_fit(free_list_ptr, 7);
+
+  // TODO: Print out the IDs
+  printf("First Fit id: %d\n", first_fit_id);
+  printf("Best  Fit  id: %d\n", best_fit_id);
+  printf("Worst Fit id: %d\n", worst_fit_id);
+  return 0;
+}
+
+//
+//
+// traverse the LL
+//
+// at each node check if surrounding blocks are free
+// if yes then merge with current node
+// go until reach tail
+//
+//
+// take the pointer from the newly freed address
+// take the head of the linked list of free blocks
+// traverse the list
+// at each traversal of free blocks check the memory address if the newly freed
+// block is next to it if yes merge the blocks into one then return if no keep
+// traversing and if no blocks are found then that means no blocks are next to
+// the new one are free
+//  void coalasce( address freed, head) {
+//
+//  curr = head
+//  while head( !+ NULL) {
+//
+//    check if neighbors
+//    if(address is next to curr) {
+//      merge the blocks
+//      return;
+//      }
+//    curr = curr->next
+//
+//  }
+//

@@ -1,0 +1,11 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+
+  int *test = sbrk(0); 
+
+  printf("%p\n" , test);
+
+}

@@ -33,7 +33,7 @@ struct client_info {
 
 void *handle_client(void *arg) {
   struct client_info *client = (struct client_info *)arg;
-
+  
   // TODO: print the message received from client
   // TODO: increase total_message_count per message
   int cfd = client->cfd;
@@ -42,7 +42,7 @@ void *handle_client(void *arg) {
   ssize_t num_read;
   char buf[BUF_SIZE];
 
-  while ((num_read = read(cfd, buf, BUF_SIZE)) > 0) {
+  while ((num_read = read(cfd, buf, BUF_SIZE)) > 0 )  {
     buf[num_read] = '\0';
     printf("Client ID %d: %s", client_id, buf);
 
@@ -50,11 +50,11 @@ void *handle_client(void *arg) {
     total_message_count++;
     printf("total message count: %d", total_message_count);
     pthread_mutex_unlock(&count_mutex);
-  }
-  if (num_read == -1) {
+    }
+  if(num_read == - 1) {
     handle_error("read");
   }
-  if (close(cfd) == -1) {
+  if(close(cfd) == -1) {
     handle_error("cfd");
   }
 
@@ -88,13 +88,12 @@ int main() {
     // TODO: call handle_client() when launching a new thread, and provide
     // client_info
 
-    struct client_info *client =
-        (struct client_info *)malloc(sizeof(struct client_info));
-    if (client == NULL) {
+    struct client_info *client = (struct client_info*) malloc(sizeof(struct client_info));
+    if(client == NULL) {
       handle_error("malloc");
     }
     client->cfd = accept(sfd, NULL, NULL);
-    if (client->cfd == -1) {
+    if(client->cfd == -1) {
       free(client);
       handle_error("accept");
     }
@@ -103,11 +102,14 @@ int main() {
     client->client_id = client_id_counter++;
     pthread_mutex_unlock(&client_id_mutex);
     pthread_t tid;
-    if (pthread_create(&tid, NULL, handle_client, client) != 0) {
+    if(pthread_create(&tid,NULL,handle_client,client) != 0) {
       free(client);
       handle_error("pthread_create");
     }
     pthread_detach(tid);
+
+
+
   }
 
   if (close(sfd) == -1) {

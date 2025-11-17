@@ -1,17 +1,19 @@
 /*
 Questions to answer at top of client.c:
 (You should not need to change the code in client.c)
-1. What is the address of the server it is trying to connect to (IP address and
-port number). IP address 127.0.0.1 Port 8000
+1. What is the address of the server it is trying to connect to (IP address and port number).
+    IP address 127.0.0.1
+    Port 8000
 2. Is it UDP  or TCP? How do you know?
   TCP uses the connect funtion while udb does not use it
-3. The client is going to send some data to the server. Where does it get this
-data from? How can you tell in the code? the client gets the data from the read
-function returns the byes from the STDIN_FILENO terminal
+3. The client is going to send some data to the server. Where does it get this data from? How can you tell in the code?
+    the client gets the data from the read function returns the byes from the STDIN_FILENO terminal
 4. How does the client program end? How can you tell that in the code?
-    When the size of read bytes is less than one simply put when user types
-nothing in the termianl the um of btyes is 0 and the while loop terminates.
+    When the size of read bytes is less than one simply put when user types nothing in the termianl
+    the um of btyes is 0 and the while loop terminates.
 */
+
+
 
 #include <arpa/inet.h>
 #include <stdio.h>
@@ -59,7 +61,7 @@ int main() {
     }
     printf("Just sent %zd bytes.\n", num_read);
   }
-
+  
   if (num_read == -1) {
     handle_error("read");
   }
